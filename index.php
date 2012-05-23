@@ -1,19 +1,21 @@
 <?php
 /*
 NanoAlbum
-a simple and small PHP photo album /gallery
+is a simple and small PHP photo album /gallery
+
 Goals:
--KISS - keep ist small and simple
--no database required
--zero configuration / little configuration
--small footprint: basic funtionality in just one single file
--no wasting of display area, use whole screen
--design for modern browsers , html5, css3
--design for mobile devices
--save bandwidth, using Client cache where possible
--provide original photos for download and viewing
--Licence: BSD licensed so you can do what you want with it
--demo: http://kurmis.com/album
+* KISS - keep ist small and simple
+* no database required
+* zero configuration / little configuration
+* small footprint: basic funtionality in just one single file
+* no wasting of display area, use whole screen
+* design for modern browsers , html5, css3
+* design for mobile devices
+* save bandwidth, using Client cache where possible
+* provide original photos for download and viewing
+* Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+* installation: https://github.com/oliworx/NanoAlbum/wiki/install
+* demo: http://kurmis.com/album
 */
 
 define('TITLE','Album');		// set the title/headline to whatever you like
@@ -22,7 +24,8 @@ define('MEDIUM_SIZE',600);		// size of the image on the preview (600)
 define('PRELOAD_IMAGES',true);		// preload next and previous image for faster gallery navigation (true)
 define('CSS_INLINE', false);		// will use some bandwith but saves one extra http-request (true)
 define('SELF', $_SERVER['SCRIPT_NAME']);
-define('FOOTER','&copy; 2012 <a href="http://oliver-kurmis.de">Oliver Kurmis</a> | <a href="http://www.lima-city.de/homepage/ref:260626" title="webmaster &amp; community">powered by lima-city</a> | ');
+//define('FOOTER','&copy; 2012 <a href="http://oliver-kurmis.de">Oliver Kurmis</a> | powered by  <a href="http://www.lima-city.de/homepage/ref:260626" title="webmaster &amp; community">lima-city</a> and  <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
+define('FOOTER','powered by <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
 $tStart=microtime(true);
 
 // if nothing changed to what the client has in its cache, just sent the '304 Not Modified' http header
@@ -53,10 +56,8 @@ body { margin: 0px; padding: 10px; font: 12px Arial, Helvetica, sans-serif; colo
 #content {margin:auto;}
 a {text-decoration:none;}
 h1, h2 {margin: 5px;}
-div#albums {}
 div.albumThumb {background-color: #ddd; margin: 2px; border: 2px solid #999; border-radius: 7px; font-weight:bold; vertical-align:middle; float: left; width: '. (THUMBNAIL_SIZE + 20) .'px; height: '. (THUMBNAIL_SIZE + 50) .'px; text-align:center;}
 .thumb {border: 2px solid #999; margin: 5px; max-width:'.THUMBNAIL_SIZE.'px; max-height:'.THUMBNAIL_SIZE.'px;vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
-a.album {}
 a:hover img.thumb {border: 2px solid blue;}
 img { border: 0px;}
 div.details {text-align:center;}
@@ -100,8 +101,7 @@ function getPage ($sContent) {
 <div id="footer">
 '.FOOTER.'
 <a href="http://validator.w3.org/check?uri=referer">valid HTML 5</a> | 
-<a href="http://jigsaw.w3.org/css-validator/check/referer">valid CSS 3</a> | 
-'.(round(1000*(microtime(true)-$tStart))).' ms 
+<a href="http://jigsaw.w3.org/css-validator/check/referer">valid CSS 3</a>
 </div>
 </footer>
 </div>
@@ -299,13 +299,10 @@ function getAlbum($directory) {
     foreach ($aImages as $sFile)
         $sThumbs.="
     <a href=\"".getDetailsUrl($directory.$sFile)."\"><img class=\"thumb\" alt=\"$sFile\" title=\"$sFile\" src=\"".getThumbUrl($directory.$sFile)."\"></a>";
-    if ($sAlbums)				// put sub albums in an extra div
-        $sAlbums = '
-        <div id="albums">'.$sAlbums.'
-</div><div style="clear:both"></div>';
+    if ($sAlbums)				
+        $sAlbums .='<div style="clear:both"></div>'; // clear floating
     return($sHeadline.$sAlbums.$sThumbs);
 }
-
 
 if ($_REQUEST['t'])				        // get thumbnail with the given path and filename
 	getThumbImage($_REQUEST['t']);

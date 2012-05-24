@@ -7,7 +7,7 @@ Goals:
 * KISS - keep ist small and simple
 * no database required
 * zero configuration / little configuration
-* small footprint: basic funtionality in just one single file
+* small footprint: basic functionality in just one single file
 * no wasting of display area, use whole screen
 * design for modern browsers , html5, css3
 * design for mobile devices

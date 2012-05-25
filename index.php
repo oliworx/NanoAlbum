@@ -21,11 +21,12 @@ Goals:
 define('TITLE','Album');		// set the title/headline to whatever you like
 define('THUMBNAIL_SIZE',160);		// size of the thumbnails in the album overview (160)
 define('MEDIUM_SIZE',600);		// size of the image on the preview (600)
+define('MOBILE_SIZE',600);		// size of the image on the preview (600)
 define('PRELOAD_IMAGES',true);		// preload next and previous image for faster gallery navigation (true)
-define('CSS_INLINE', false);		// will use some bandwith but saves one extra http-request (true)
+define('CSS_INLINE', true);		// will use some bandwith but saves one extra http-request (true)
 define('SELF', $_SERVER['SCRIPT_NAME']);
-//define('FOOTER','&copy; 2012 <a href="http://oliver-kurmis.de">Oliver Kurmis</a> | powered by  <a href="http://www.lima-city.de/homepage/ref:260626" title="webmaster &amp; community">lima-city</a> and  <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
-define('FOOTER','powered by <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
+define('FOOTER','&copy; 2012 <a href="http://oliver-kurmis.de">Oliver Kurmis</a> | powered by  <a href="http://www.lima-city.de/homepage/ref:260626" title="webmaster &amp; community">lima-city</a> and  <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
+//define('FOOTER','powered by <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
 $tStart=microtime(true);
 
 // if nothing changed to what the client has in its cache, just sent the '304 Not Modified' http header
@@ -57,16 +58,36 @@ body { margin: 0px; padding: 10px; font: 12px Arial, Helvetica, sans-serif; colo
 a {text-decoration:none;}
 h1, h2 {margin: 5px;}
 div.albumThumb {background-color: #ddd; margin: 2px; border: 2px solid #999; border-radius: 7px; font-weight:bold; vertical-align:middle; float: left; width: '. (THUMBNAIL_SIZE + 20) .'px; height: '. (THUMBNAIL_SIZE + 50) .'px; text-align:center;}
-.thumb {border: 2px solid #999; margin: 5px; max-width:'.THUMBNAIL_SIZE.'px; max-height:'.THUMBNAIL_SIZE.'px;vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
+div.thumb {float: left; text-align:center;}
+img.thumb {border: 2px solid #999; margin: 5px; max-width:'.THUMBNAIL_SIZE.'px; max-height:'.THUMBNAIL_SIZE.'px;vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
 a:hover img.thumb {border: 2px solid blue;}
 img { border: 0px;}
-div.details {text-align:center;}
+div.details {text-align:center;white-space : nowrap;}
 .preload {max-width: 50px; max-height:50px; display:none;}
 div.details img {vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
 div.descr {font-weight:bold; margin:10px;}
 a.prevnext {padding:5px 10px; font-size: 60px;color: #999; border: 1px solid #999;border-radius: 5px;box-shadow: 3px 2px 5px #aaa;}
 #footer { padding: 20px; font-size: 10px; color: #999; }
-#footer a {color: #999;}';
+#footer a {color: #999;}
+div.clr {clear:both}
+@media screen and (max-width: 600px) {
+body { padding: 1px; }
+div.albumThumb {overflow: hidden; margin: 1px; border: 1px solid #999; border-radius: 4px; font-weight:normal; width: '. (THUMBNAIL_SIZE - 10) .'px; height: '. (THUMBNAIL_SIZE -20) .'px;}
+img.thumb { margin: 0 auto; border: none; box-shadow:none }
+a:hover img.thumb {border: none;}
+div.thumb {margin: 0px 1px 1px 0px; width: '. round(THUMBNAIL_SIZE *0.7) .'px; height: '. round(THUMBNAIL_SIZE *0.7) .'px;overflow: hidden;}
+div.thumb img.thumb { margin: -10px; }
+a.album, #footer {  font-size: 9px; }
+div.details img {vertical-align:middle;box-shadow: 2px 1px 3px #aaa;  max-width: 400px;}
+a.prevnext {padding:30px 4px; font-size: 20px;color: #999; border-radius: 4px; box-shadow: 2px 1px 3px #aaa;}
+}
+@media screen and (max-width: 330px) {
+div.details img {vertical-align:middle;box-shadow: none; max-width: 240px;}
+div.thumb {width: '. round(THUMBNAIL_SIZE *0.64) .'px; height: '. round(THUMBNAIL_SIZE *0.64) .'px;}
+div.thumb img.thumb { margin: -20px; }
+}
+';
+   
     if ($detached) {
 	header('Content-Type: text/css; charset=UTF-8',true);
 	sendIfChanged($sCss, 50000);
@@ -88,6 +109,7 @@ function getPage ($sContent) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>'.TITLE.'</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 '.$sCssTag.'
 </head>
 <body>
@@ -298,9 +320,11 @@ function getAlbum($directory) {
 <div title=\"album\" class=\"albumThumb\"><a class=\"album\" href=\"".getAlbumUrl($directory.$sFile)."\" >".$sFile.'<br>'.getAlbumThumbnail($directory.$sFile)."</a></div>";
     foreach ($aImages as $sFile)
         $sThumbs.="
-    <a href=\"".getDetailsUrl($directory.$sFile)."\"><img class=\"thumb\" alt=\"$sFile\" title=\"$sFile\" src=\"".getThumbUrl($directory.$sFile)."\"></a>";
-    if ($sAlbums)				
-        $sAlbums .='<div style="clear:both"></div>'; // clear floating
+<div class=\"thumb\"><a href=\"".getDetailsUrl($directory.$sFile)."\"><img class=\"thumb\" alt=\"$sFile\" title=\"$sFile\" src=\"".getThumbUrl($directory.$sFile)."\"></a></div>";
+    if ($sAlbums)			
+        $sAlbums .='<div class="clr"></div>'; // stop floating
+    if ($sThumbs)			
+        $sThumbs .='<div class="clr"></div>'; // stop floating
     return($sHeadline.$sAlbums.$sThumbs);
 }
 

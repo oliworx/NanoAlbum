@@ -7,7 +7,7 @@ Goals:
 * KISS - keep ist small and simple
 * no database required
 * zero configuration / little configuration
-* small footprint: basic functionality in just one single file
+* small footprint: basic funtionality in just one single file
 * no wasting of display area, use whole screen
 * design for modern browsers , html5, css3
 * design for mobile devices
@@ -21,12 +21,12 @@ Goals:
 define('TITLE','Album');		// set the title/headline to whatever you like
 define('THUMBNAIL_SIZE',160);		// size of the thumbnails in the album overview (160)
 define('MEDIUM_SIZE',600);		// size of the image on the preview (600)
-define('MOBILE_SIZE',600);		// size of the image on the preview (600)
+define('MOBILE_SIZE',600);		// if screen ist smaller, swich to mobile css
 define('PRELOAD_IMAGES',true);		// preload next and previous image for faster gallery navigation (true)
-define('CSS_INLINE', true);		// will use some bandwith but saves one extra http-request (true)
+define('CSS_INLINE', false);		// will use some bandwith but saves one extra http-request (true)
+define('JQERY', false);			// user jQuery mobile
 define('SELF', $_SERVER['SCRIPT_NAME']);
-define('FOOTER','&copy; 2012 <a href="http://oliver-kurmis.de">Oliver Kurmis</a> | powered by  <a href="http://www.lima-city.de/homepage/ref:260626" title="webmaster &amp; community">lima-city</a> and  <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
-//define('FOOTER','powered by <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
+define('FOOTER','powered by <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
 $tStart=microtime(true);
 
 // if nothing changed to what the client has in its cache, just sent the '304 Not Modified' http header
@@ -53,15 +53,15 @@ function sendIfChanged($sContent, $iMaxAge=60) {
 function getCss ($detached=false) {
     $sCss='
 body { margin: 0px; padding: 10px; font: 12px Arial, Helvetica, sans-serif; color: #222; }
-#page {text-align:left; }
-#content {margin:auto;}
-a {text-decoration:none;}
-h1, h2 {margin: 5px;}
-div.albumThumb {background-color: #ddd; margin: 2px; border: 2px solid #999; border-radius: 7px; font-weight:bold; vertical-align:middle; float: left; width: '. (THUMBNAIL_SIZE + 20) .'px; height: '. (THUMBNAIL_SIZE + 50) .'px; text-align:center;}
-div.thumb {float: left; text-align:center;}
-img.thumb {border: 2px solid #999; margin: 5px; max-width:'.THUMBNAIL_SIZE.'px; max-height:'.THUMBNAIL_SIZE.'px;vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
-a:hover img.thumb {border: 2px solid blue;}
 img { border: 0px;}
+#page {}
+#content {}
+a {text-decoration:none;}
+h1, h2 {margin: 3px; display: inline;}
+div.albumThumb {overflow: hidden; background-color: #ddd; margin: 2px; border: 2px solid #999; border-radius: 7px; font-weight:bold; vertical-align:middle; float: left; width: '. (THUMBNAIL_SIZE + 20) .'px; height: '. (THUMBNAIL_SIZE ) .'px; text-align:center;}
+div.thumb {float: left; text-align:center;}
+img.thumb {margin: 5px; height:'.round(THUMBNAIL_SIZE*0.75).'px;vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
+div.albumThumb img.thumb { height:auto !important;}
 div.details {text-align:center;white-space : nowrap;}
 .preload {max-width: 50px; max-height:50px; display:none;}
 div.details img {vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
@@ -70,21 +70,22 @@ a.prevnext {padding:5px 10px; font-size: 60px;color: #999; border: 1px solid #99
 #footer { padding: 20px; font-size: 10px; color: #999; }
 #footer a {color: #999;}
 div.clr {clear:both}
-@media screen and (max-width: 600px) {
+@media screen and (max-width: '.MOBILE_SIZE.'px) {
 body { padding: 1px; }
-div.albumThumb {overflow: hidden; margin: 1px; border: 1px solid #999; border-radius: 4px; font-weight:normal; width: '. (THUMBNAIL_SIZE - 10) .'px; height: '. (THUMBNAIL_SIZE -20) .'px;}
-img.thumb { margin: 0 auto; border: none; box-shadow:none }
-a:hover img.thumb {border: none;}
-div.thumb {margin: 0px 1px 1px 0px; width: '. round(THUMBNAIL_SIZE *0.7) .'px; height: '. round(THUMBNAIL_SIZE *0.7) .'px;overflow: hidden;}
-div.thumb img.thumb { margin: -10px; }
+div.albumThumb {margin: 1px; border: 1px solid #999; border-radius: 4px; font-weight:normal; width: '. (THUMBNAIL_SIZE - 10) .'px; height: '. (THUMBNAIL_SIZE -20) .'px;}
+img.thumb { margin: 0 auto; border: none; box-shadow:none; height:auto; max-width:'.THUMBNAIL_SIZE.'px; max-height:'.THUMBNAIL_SIZE.'px;}
+div.thumb {margin: 1px 0px 0px 1px; width: '. round(THUMBNAIL_SIZE *0.71) .'px; height: '. round(THUMBNAIL_SIZE *0.71) .'px;overflow: hidden;}
+div.thumb img.thumb { margin: -5px; }
 a.album, #footer {  font-size: 9px; }
 div.details img {vertical-align:middle;box-shadow: 2px 1px 3px #aaa;  max-width: 400px;}
 a.prevnext {padding:30px 4px; font-size: 20px;color: #999; border-radius: 4px; box-shadow: 2px 1px 3px #aaa;}
 }
 @media screen and (max-width: 330px) {
+h1, h2 {font-size:15px}
 div.details img {vertical-align:middle;box-shadow: none; max-width: 240px;}
-div.thumb {width: '. round(THUMBNAIL_SIZE *0.64) .'px; height: '. round(THUMBNAIL_SIZE *0.64) .'px;}
-div.thumb img.thumb { margin: -20px; }
+div.thumb {width: '. round(THUMBNAIL_SIZE *0.65) .'px; height: '. round(THUMBNAIL_SIZE *0.65) .'px;}
+div.thumb img.thumb { margin: -10px; }
+div.descr {font-size:10px; font-weight:bold; margin:5px;}
 }
 ';
    
@@ -97,36 +98,40 @@ div.thumb img.thumb { margin: -20px; }
     return $sCss;
 }
 
-function getPage ($sContent) {
+function getPage ($sContent, $sHeadline = '') {
     global $tStart;
 	header('Content-Type: text/html; charset=UTF-8',true);
     	if (CSS_INLINE)
 	    $sCssTag = '<style type="text/css">'.getCss().'</style>';
     	else
 	    $sCssTag = '<link type="text/css" rel="stylesheet" href="'.SELF.'?css">';
+    	if (JQERY)
+	    $sJqmTag = '
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>';
+    	else
+	    $sJqmTag = '';
 	$sHtml='<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>'.TITLE.'</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-'.$sCssTag.'
+'.$sJqmTag.$sCssTag.'
 </head>
 <body>
-<div id="page">
-	<div id="content">
-	<h1><a accesskey="1" href="./">'.TITLE.'</a></h1>';
-	$sHtml.=$sContent;
-	$sHtml.='
-</div>
-<footer>
-<div id="footer">
-'.FOOTER.'
-<a href="http://validator.w3.org/check?uri=referer">valid HTML 5</a> | 
-<a href="http://jigsaw.w3.org/css-validator/check/referer">valid CSS 3</a>
-</div>
-</footer>
-</div>
+  <div id="page" data-role="page" data-theme="b">
+<div data-role="header"><h1><a accesskey="1" href="./">'.TITLE.'</a>'.$sHeadline.'</h1></div>
+'.$sContent.'
+    <footer>
+	<div id="footer">
+	'.FOOTER.'
+	<a href="http://validator.w3.org/check?uri=referer">HTML5</a> | 
+	<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS3</a>
+	</div>
+    </footer>
+  </div>
 </body>
 </html>';
     sendIfChanged($sHtml);
@@ -201,7 +206,7 @@ function getThumbImage ($filepath, $size = THUMBNAIL_SIZE) {
 	exit();
 }
 
-function getDetails ($filepath) {
+function getDetails ($filepath,&$sHeadline) {
     	$path = dirname($filepath);
     	$file = basename($filepath);
     	list($aDirs,$aImages)=getDirectory($path);
@@ -216,7 +221,7 @@ function getDetails ($filepath) {
 	}
     	$sHtml='<div class="details">';
     	if ($path != '.')
-	    	$sHtml.='<a href="'.getAlbumUrl($path).'" title="go to album '.$path.'"><h2>'.$path.'</h2></a>';
+	    	$sHeadline=' &gt;&nbsp;<a href="'.getAlbumUrl($path).'" title="go to album '.$path.'">'.$path.'</a>';
     	if ($pref)
 	    	$sHtml.='
 <a class="prevnext" href="'.getDetailsUrl($path.'/'.$pref).'">&lt;</a>';
@@ -294,7 +299,7 @@ function getAlbumUrl ($sPath) {
 }
 
 function getDetailsUrl ($filepath) {
-    return SELF.'?d='.urlencode($filepath).'#img';
+    return SELF.'?d='.urlencode($filepath).(JQERY?'':'#img');
 }
 
 function getAlbumThumbnail ($directory) {
@@ -306,13 +311,13 @@ function getAlbumThumbnail ($directory) {
     return false;
 }
 
-function getAlbum($directory) {
-    $sHeadline=$sAlbums=$sThumbs='';
+function getAlbum($directory, &$sHeadline) {
+    $sAlbums=$sThumbs='';
     $path = dirname($filepath);
 
     list($aDirs,$aImages)=getDirectory($directory);
     if ($directory) {
-	    $sHeadline.='<h2>'.$directory.'</h2>';
+	    $sHeadline=' &gt;'.$directory;
 	    $directory.='/';
     }
     foreach ($aDirs as $sFile)
@@ -325,9 +330,10 @@ function getAlbum($directory) {
         $sAlbums .='<div class="clr"></div>'; // stop floating
     if ($sThumbs)			
         $sThumbs .='<div class="clr"></div>'; // stop floating
-    return($sHeadline.$sAlbums.$sThumbs);
+    return($sAlbums.$sThumbs);
 }
 
+$sHeadline = '';
 if ($_REQUEST['t'])				        // get thumbnail with the given path and filename
 	getThumbImage($_REQUEST['t']);
 elseif ($_REQUEST['m']) 			        // get mid size image with the given path and filename
@@ -335,9 +341,8 @@ elseif ($_REQUEST['m']) 			        // get mid size image with the given path and
 elseif (isset($_GET['css'])) 			        // get mid size image with the given path and filename
 	getCss(true);
 elseif ($_REQUEST['d']) 			        // get css file
-	$sHtml=getDetails($_REQUEST['d']);
+	$sHtml=getDetails($_REQUEST['d'], $sHeadline);
 else
-	$sHtml=getAlbum($_REQUEST['a']); 		// get album of images
-
-getPage($sHtml);
+	$sHtml=getAlbum($_REQUEST['a'], $sHeadline); 		// get album of images
+getPage($sHtml, $sHeadline);
 ?>

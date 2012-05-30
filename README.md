@@ -3,7 +3,7 @@ NanoAlbum
 
 a simple and small PHP photo album /gallery  
 Goals:
-* KISS - keep ist small and simple
+* KISS - keep it small and simple
 * no database required
 * zero configuration / little configuration
 * small footprint: basic funtionality in just one single file

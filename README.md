@@ -14,4 +14,4 @@ Goals:
 * provide original photos for download and viewing
 * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 * installation: https://github.com/oliworx/NanoAlbum/wiki/install
-* demo: http://kurmis.com/album
+* demo: http://kurmis.com

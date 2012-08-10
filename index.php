@@ -35,7 +35,7 @@ function sendIfChanged($sContent, $iMaxAge=60) {
     header("Pragma: public"); 
     header("Cache-Control: max-age=".$iMaxAge); 		// let the browser cache the content
     header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$iMaxAge) . ' GMT'); 
-    $sEtag=md5($sConten);
+    $sEtag=md5($sContent);
     if ($_SERVER['HTTP_IF_NONE_MATCH'] == $sEtag) {
 	// Okay, the browser already has the
 	// latest version of our page in his

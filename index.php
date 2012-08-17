@@ -66,7 +66,7 @@ div.details {text-align:center;white-space : nowrap;}
 .preload {max-width: 50px; max-height:50px; display:none;}
 div.details img {vertical-align:middle;box-shadow: 3px 2px 5px #aaa;border-radius: 5px;}
 div.descr {font-weight:bold; margin:10px;}
-a.prevnext {padding:5px 10px; font-size: 60px;color: #999; border: 1px solid #999;border-radius: 5px;box-shadow: 3px 2px 5px #aaa; background-size:110px; background-position:center; background-repeat:no-repeat;}
+a.prevnext {padding:5px 10px; font-size: 60px;color: #999; border: 1px solid #999;border-radius: 5px;box-shadow: 3px 2px 5px #aaa; background-size:118px; background-position:center; background-repeat:no-repeat;}
 #footer { padding: 20px; font-size: 10px; color: #999; }
 #footer a {color: #999;}
 div.clr {clear:both}

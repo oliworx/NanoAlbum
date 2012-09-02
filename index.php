@@ -17,16 +17,17 @@ Goals:
 * installation: https://github.com/oliworx/NanoAlbum/wiki/install
 * demo: http://kurmis.com/
 */
-@include('config.php');			// you can put your configuration in an extra file
-if (!defined('TITLE')) 			define('TITLE','Album');		// set the title/headline to whatever you like
+@include('config.php');		// you can put your configuration in an extra file
+if (!defined('TITLE')) 		define('TITLE','Album');	// set the title/headline to whatever you like
 if (!defined('THUMBNAIL_SIZE')) define('THUMBNAIL_SIZE',160);	// size of the thumbnails in the album overview (160)
-if (!defined('MEDIUM_SIZE'))	define('MEDIUM_SIZE',600);		// size of the image on the preview (600)
-if (!defined('MOBILE_SIZE'))	define('MOBILE_SIZE',600);		// if screen ist smaller, swich to mobile css
+if (!defined('MEDIUM_SIZE'))	define('MEDIUM_SIZE',600);	// size of the image on the preview (600)
+if (!defined('MOBILE_SIZE'))	define('MOBILE_SIZE',600);	// if screen ist smaller, swich to mobile css
 if (!defined('PRELOAD_IMAGES'))	define('PRELOAD_IMAGES',true);	// preload next and previous image for faster gallery navigation (true)
-if (!defined('CSS_INLINE'))		define('CSS_INLINE', false);	// will use some bandwith but saves one extra http-request (true)
-if (!defined('FOOTER'))			define('FOOTER','powered by <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
+if (!defined('CSS_INLINE'))	define('CSS_INLINE', false);	// will use some bandwith but saves one extra http-request (true)
+if (!defined('FOOTER'))		define('FOOTER','powered by <a href="https://github.com/oliworx/NanoAlbum">NanoAlbum</a> | ');
 
 define('SELF', $_SERVER['SCRIPT_NAME']);
+define('BATSU',base64_decode('R0lGODlhEgARALMAAMwzZvzy9eWZstVZgt9/n/XZ4v////LM2c8/b9lljAAAAAAAAAAAAAAAAAAAAAAAACH5BAAHAP8ALAAAAAASABEAAAQ30MhJq7046ynC7VYwDB5FIMUlktOZYqvnbuu8GQECHLd0jiWNKyZESYgX2xEYSrwoAWdvSqVGAAA7'));
 $tStart=microtime(true);
 
 // if nothing changed to what the client has in its cache, just sent the '304 Not Modified' http header
@@ -45,7 +46,7 @@ function sendIfChanged($sContent, $iMaxAge=60) {
 		// speeds up the loading for the visitor
 		header('HTTP/1.1 304 Not Modified');
 	} else {  
-		header('Etag: '.$sEtag); 
+		header('Etag: '.$sEtag);
 		echo $sContent;
 	}
 }
@@ -58,10 +59,11 @@ img { border: 0px;}
 #content {}
 a {text-decoration:none;}
 h1, h2 {margin: 3px; display: inline;}
-div.albumThumb {overflow: hidden; background-color: #ddd; margin: 2px; border: 2px solid #999; border-radius: 7px; font-weight:bold; vertical-align:middle; float: left; width: '. (THUMBNAIL_SIZE + 20) .'px; height: '. (THUMBNAIL_SIZE ) .'px; text-align:center;}
-div.thumb {float: left; text-align:center;}
+ul {margin: 0; padding: 0;}
+li {list-style:none;display:block;float:left;overflow: hidden;}
+ul.albums li {background-color: #ddd; margin: 2px; border: 2px solid #999; border-radius: 7px; font-weight:bold; vertical-align:middle; width:'. (THUMBNAIL_SIZE + 20) .'px; height: '. (THUMBNAIL_SIZE ) .'px ; text-align:center;}
 img.thumb {margin: 5px; border: 1px; border-radius: 5px; height:'.round(THUMBNAIL_SIZE*0.75).'px;vertical-align:middle;box-shadow: 3px 2px 5px #aaa;}
-div.albumThumb img.thumb { height:auto !important;}
+ul.albums li img.thumb {width:'.THUMBNAIL_SIZE.'px;height:auto;}
 div.details {text-align:center;white-space : nowrap;}
 .preload {max-width: 50px; max-height:50px; display:none;}
 div.details img {vertical-align:middle;box-shadow: 3px 2px 5px #aaa;border-radius: 5px;}
@@ -70,28 +72,28 @@ a.prevnext {padding:5px 10px; font-size: 60px;color: #999; border: 1px solid #99
 #footer { padding: 20px; font-size: 10px; color: #999; }
 #footer a {color: #999;}
 div.clr {clear:both}
+
 @media screen and (max-width: '.MOBILE_SIZE.'px) {
-body { padding: 1px; }
-div.albumThumb {margin: 1px; border: 1px solid #999; border-radius: 4px; font-weight:normal; width: '. (THUMBNAIL_SIZE - 10) .'px; height: '. (THUMBNAIL_SIZE -20) .'px;}
-img.thumb { margin: 0 auto; border: none; box-shadow:none; height:auto; max-width:'.THUMBNAIL_SIZE.'px; max-height:'.THUMBNAIL_SIZE.'px;}
-div.thumb {margin: 1px 0px 0px 1px; width: '. round(THUMBNAIL_SIZE *0.71) .'px; height: '. round(THUMBNAIL_SIZE *0.71) .'px;overflow: hidden;}
-div.thumb img.thumb { margin: -5px; }
-a.album, #footer {  font-size: 9px; }
+body {padding: 0px;}
+ul.albums li {margin: 1px; border: 1px solid #999; border-radius: 4px; font-weight:normal; width:'. (THUMBNAIL_SIZE - 10) .'px; height: '. (THUMBNAIL_SIZE -20) .'px;}
+img.thumb { margin: 0 auto; border: none; border-radius: 0; box-shadow:none; height:auto; max-width:'.THUMBNAIL_SIZE.'px; max-height:'.THUMBNAIL_SIZE.'px;}
+ul li {margin: 1px 0px 0px 1px; width: '. round(THUMBNAIL_SIZE *0.62) .'px; height: '. round(THUMBNAIL_SIZE *0.62) .'px;}
+ul li img.thumb {margin: 0 -5px; }
+a.album, #footer {font-size: 9px; }
 div.details img {vertical-align:middle;box-shadow: 2px 1px 3px #aaa;  max-width: 400px;}
 a.prevnext {padding:30px 4px; font-size: 20px;color: #999; border-radius: 4px; box-shadow: 2px 1px 3px #aaa;}
 }
+
 @media screen and (max-width: 330px) {
 h1, h2 {font-size:15px}
 div.details img {vertical-align:middle;box-shadow: none; max-width: 240px;}
-div.thumb {width: '. round(THUMBNAIL_SIZE *0.65) .'px; height: '. round(THUMBNAIL_SIZE *0.65) .'px;}
-div.thumb img.thumb { margin: -10px;}
 div.descr {font-size:10px; font-weight:bold; margin:5px;}
 }
 ';
 
 	if ($detached) {
 		header('Content-Type: text/css; charset=UTF-8',true);
-		sendIfChanged($sCss, 200*3500);
+		sendIfChanged($sCss, 5000);
 		exit();
 	}
 
@@ -168,7 +170,7 @@ function getThumbImage ($filepath, $size = THUMBNAIL_SIZE) {
 		if(stristr($file, ".jpg")||stristr($file, ".jpeg") ) 
 			$src = imagecreatefromjpeg($filepath);
 		else die('not supportet');
-		list($width,$height)=getimagesize($filepath);		// get image dimensions
+		list($width,$height)=getimagesize($filepath);	// get image dimensions
 		if ($width > $height) {
 			$newwidth = $size;			// landscape
 			$newheight=round(($height/$width) * $size);
@@ -182,19 +184,22 @@ function getThumbImage ($filepath, $size = THUMBNAIL_SIZE) {
 		if (!is_dir($thumbspath))
 		if(!@mkdir($thumbspath,0755,true))	// 755 is not very secure, but 700 can couse trouble, please try 700 your own
 			die('sorry, unable to create thumbnail directory, please check permissions');
-		imageinterlace($tmp, true);			// turn interlace on, better for slow connections e.g. on mobile devices
-		imagejpeg($tmp,$thumbfilename);		// create and save jpg
+		imageinterlace($tmp, true);		// turn interlace on, better for slow connections e.g. on mobile devices
+		if (!imagejpeg($tmp,$thumbfilename)) {	// create and save jpg
+			header("Content-Type: image/gif",false);
+			die(BATSU);//die('could not save thumbnail');
+		}
 		imagedestroy($src);
 		imagedestroy($tmp);
 	}
 
-	$expires = 60*60*24*14;					// seconds, minutes, hours, days  
+	$expires = 60*60*24*14;				// seconds, minutes, hours, days  
 	header("Pragma: public"); 
-	header("Cache-Control: maxage=".$expires);		// let the browser cache the images
+	header("Cache-Control: maxage=".$expires);	// let the browser cache the images
 	header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$expires) . ' GMT');     
 	header("Content-Type: image/jpeg",false);
 	header("Content-Length: ".@filesize("$thumbfilename"));
-	if (!@readfile($thumbfilename)) {			// send file content to the browser
+	if (!@readfile($thumbfilename)) {		// send file content to the browser
 		header("Content-Type: text/plain",true);  // or if not possible
 		die('could not read file:'.$thumbfilename); // give simple error message
 	};
@@ -321,27 +326,31 @@ function getAlbum($directory, &$sHeadline, &$sTitle=null) {
 	}
 	foreach ($aDirs as $sFile)
 		$sAlbums.="
-<div title=\"album\" class=\"albumThumb\"><a class=\"album\" href=\"".getAlbumUrl($directory.$sFile)."\" >".$sFile.'<br>'.getAlbumThumbnail($directory.$sFile)."</a></div>";
+			<li><a class=\"album\" href=\"".getAlbumUrl($directory.$sFile)."\" >".$sFile.'<br>'.getAlbumThumbnail($directory.$sFile)."</a></li>";
 	foreach ($aImages as $sFile)
 		$sThumbs.="
-<div class=\"thumb\"><a href=\"".getDetailsUrl($directory.$sFile)."\"><img class=\"thumb\" alt=\"$sFile\" title=\"$sFile\" src=\"".getThumbUrl($directory.$sFile)."\"></a></div>";
+			<li><a href=\"".getDetailsUrl($directory.$sFile)."\"><img class=\"thumb\" alt=\"$sFile\" title=\"$sFile\" src=\"".getThumbUrl($directory.$sFile)."\"></a></li>";
 	if ($sAlbums)      
-		$sAlbums .='<div class="clr"></div>'; // stop floating
+		$sAlbums ='
+		<ul class="albums">'.$sAlbums.'</ul>
+		<div class="clr"></div>';		// make a proper unordered list, stop floating
 	if ($sThumbs)
-		$sThumbs .='<div class="clr"></div>'; // stop floating
+		$sThumbs ='
+		<ul>'.$sThumbs.'</ul>
+		<div class="clr"></div'; 		// make a proper unordered list
 	return($sAlbums.$sThumbs);
 }
 
 $sHeadline = $sTitle = '';
-if ($_REQUEST['t'])								// get thumbnail with the given path and filename
+if ($_REQUEST['t'])						// get thumbnail with the given path and filename
 	getThumbImage($_REQUEST['t']);
-elseif ($_REQUEST['m'])							// get mid size image with the given path and filename
+elseif ($_REQUEST['m'])						// get mid size image with the given path and filename
 	getThumbImage($_REQUEST['m'],MEDIUM_SIZE);
 elseif (isset($_GET['css']))					// get css file
 	getCss(true);
-elseif ($_REQUEST['d'])							// get foto page with midsize thumbnail ( details)
+elseif ($_REQUEST['d'])						// get foto page with midsize thumbnail ( details)
 	$sHtml=getDetails($_REQUEST['d'], $sHeadline, $sTitle);
-else											// get album of images
+else								// get album of images
 	$sHtml=getAlbum($_REQUEST['a'], $sHeadline, $sTitle);
-getPage($sHtml, $sHeadline, $sTitle);			// create the entire html-Page
+getPage($sHtml, $sHeadline, $sTitle);				// create the entire html-Page
 ?>

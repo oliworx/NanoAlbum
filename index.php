@@ -337,7 +337,7 @@ function getAlbum($directory, &$sHeadline, &$sTitle=null) {
 	if ($sThumbs)
 		$sThumbs ='
 		<ul>'.$sThumbs.'</ul>
-		<div class="clr"></div'; 		// make a proper unordered list
+		<div class="clr"></div>'; 		// make a proper unordered list
 	return($sAlbums.$sThumbs);
 }
 

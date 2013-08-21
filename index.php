@@ -46,7 +46,7 @@ function sendIfChanged($sContent, $iMaxAge=60) {
 		// speeds up the loading for the visitor
 		header('HTTP/1.1 304 Not Modified');
 	} else {  
-		header('Etag: '.$sEtag);
+		header('Etag: "'.$sEtag.'"');
 		echo $sContent;
 	}
 }

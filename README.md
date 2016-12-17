@@ -1,6 +1,9 @@
 NanoAlbum
 =========
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9accc02e5de34147962834a47a744c7e)](https://www.codacy.com/app/kurmis/NanoAlbum?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=oliworx/NanoAlbum&amp;utm_campaign=badger)
+
+
 a simple and small PHP photo album /gallery  
 Goals:
 * KISS - keep it small and simple
